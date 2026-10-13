@@ -41,7 +41,7 @@ export function SiteHeader({ pagina }: { pagina: Pagina }) {
   return (
     <header className="top">
       <div className="wrap">
-        <Link href="/" className="brand" aria-label={pagina === "home" ? "ELPIS, inizio pagina" : "ELPIS, torna alla pagina iniziale"}>
+        <Link href="/" className="brand" aria-label={pagina === "home" ? "MALTEN, inizio pagina" : "MALTEN, torna alla pagina iniziale"}>
           <Logo />
         </Link>
         <nav aria-label="Principale">

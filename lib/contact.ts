@@ -16,9 +16,10 @@ export type Esito = { ok: true; value: Richiesta } | { ok: false; campi: Campo[]
 export interface Mail {
   from: string;
   to: string;
-  replyTo: { name: string; address: string };
+  replyTo: string | { name: string; address: string };
   subject: string;
   text: string;
+  headers?: Record<string, string>;
 }
 
 // Toglie i caratteri di controllo (compresi gli a capo): impedisce di aggiungere intestazioni alla mail.
@@ -52,7 +53,35 @@ export function buildMail(p: { value: Richiesta; to: string; from: string; recei
     from,
     to,
     replyTo: { name: `${value.nome} ${value.cognome}`.replace(/["<>]/g, ""), address: value.email },
-    subject: `Nuova richiesta dal sito ELPIS: ${value.nome} ${value.cognome}`,
+    subject: `Nuova richiesta dal sito MALTEN: ${value.nome} ${value.cognome}`,
     text: `Nome: ${value.nome}\nCognome: ${value.cognome}\nEmail: ${value.email}\nRicevuta: ${receivedAt}\n\nMessaggio:\n${value.messaggio}\n`,
+  };
+}
+
+/**
+ * Conferma automatica per chi ha scritto: va all'indirizzo indicato nel modulo.
+ * Per non poter essere usata contro terzi (qualcuno potrebbe scrivere l'indirizzo di un'altra persona) l'oggetto è fisso,
+ * il messaggio di chi scrive non viene ripetuto e c'è la frase «se non sei stato tu, ignora questa email».
+ * Le risposte arrivano al team (replyTo = indirizzo che riceve le richieste).
+ */
+export function buildConfirmation(p: { value: Richiesta; from: string; replyTo: string }): Mail {
+  const { value, from, replyTo } = p;
+  return {
+    from,
+    to: value.email,
+    replyTo,
+    subject: "Abbiamo ricevuto la tua richiesta | MALTEN",
+    text: [
+      `Ciao ${value.nome},`,
+      "",
+      "abbiamo ricevuto la tua richiesta e ti risponderemo noi, di persona, a questo indirizzo email.",
+      "Se vuoi aggiungere qualcosa nel frattempo, puoi rispondere direttamente a questo messaggio.",
+      "",
+      "Questa conferma è stata inviata in automatico. Se non hai scritto tu a MALTEN, puoi ignorare questa email.",
+      "",
+      "MALTEN",
+      "",
+    ].join("\n"),
+    headers: { "Auto-Submitted": "auto-replied" }, // evita risposte automatiche a catena (RFC 3834)
   };
 }

@@ -20,7 +20,7 @@ export const STEPS: readonly Step[] = [
     "name": "Il nome",
     "sub": "Il tuo indirizzo",
     "title": "Il nome del tuo sito",
-    "text": "Il tuo indirizzo web, per esempio elpis.example, si chiama dominio. Si registra per un periodo e va rinnovato: se scade, sito ed email smettono di funzionare.",
+    "text": "Il tuo indirizzo web, per esempio malten.example, si chiama dominio. Si registra per un periodo e va rinnovato: se scade, sito ed email smettono di funzionare.",
     "checks": [
       "Lo registriamo o lo trasferiamo da un altro fornitore",
       "Rinnovo automatico e avviso prima della scadenza",
@@ -155,7 +155,7 @@ export const WAY: readonly WayStep[] = [
     "text": "Ti diciamo cosa serve davvero, con parole semplici."
   },
   {
-    "title": "Qui ci pensiamo noi",
+    "title": "Ci pensiamo noi",
     "text": "Realizziamo il sito e, se vuoi, lo seguiamo anche dopo la pubblicazione."
   }
 ];

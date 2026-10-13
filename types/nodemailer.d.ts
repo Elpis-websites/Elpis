@@ -3,9 +3,10 @@ declare module "nodemailer" {
   export interface MailOptions {
     from: string;
     to: string;
-    replyTo?: { name: string; address: string };
+    replyTo?: string | { name: string; address: string };
     subject: string;
     text: string;
+    headers?: Record<string, string>;
   }
   export interface TransportOptions {
     host: string;

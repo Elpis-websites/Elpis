@@ -33,7 +33,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="wrap foot-bar">
-        <p>© {ANNO} ELPIS</p>
+        <p>© {ANNO} MALTEN</p>
         <a href="#contenuto">Torna su</a>
       </div>
     </footer>

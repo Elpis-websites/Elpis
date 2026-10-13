@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DownArrow } from "@/components/DownArrow";
+import { HeroGem } from "@/components/HeroGem";
 import { JsonLd } from "@/components/JsonLd";
 import { ServicesTabs } from "@/components/ServicesTabs";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { WayReveal } from "@/components/WayReveal";
 import { LEVELS, WAY, WHO, WHY } from "@/lib/content";
 import { HOME, SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -31,7 +34,9 @@ export default function Home() {
       <main id="contenuto" tabIndex={-1}>
         <div className="wrap hero">
           <div>
-            <h1>La speranza ha una forma precisa.</h1>
+            <h1>
+              L&apos;<span className="sp">innovazione</span> ha una forma precisa.
+            </h1>
             <p className="lead">Realizziamo e curiamo il sito della tua attività, dal nome all&apos;ultimo aggiornamento. Qui ci pensiamo noi.</p>
             <div className="actions">
               <Link className="btn primary" href="/contatti">
@@ -42,8 +47,12 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <aside className="hero-card" aria-labelledby="h-chi">
-            <p className="card-title" id="h-chi">
+          <HeroGem />
+        </div>
+
+        <section className="who-band" aria-labelledby="h-chi">
+          <div className="wrap">
+            <p className="band-title" id="h-chi">
               Per chi lavoriamo
             </p>
             <ul className="who">
@@ -54,18 +63,18 @@ export default function Home() {
             <p className="note">
               Piccole e medie imprese che sanno fare bene il proprio mestiere e non vogliono occuparsi di informatica. Non servono competenze tecniche.
             </p>
-          </aside>
-        </div>
+          </div>
+        </section>
 
         <section id="perche" aria-labelledby="h-perche">
-          <div className="wrap">
+          <div className="wrap split">
             <div className="sec-head">
               <h2 id="h-perche">Perché oggi ti serve un sito</h2>
               <p className="lead">
                 Molte persone cercano online prima di chiamare o di venire da te. Il sito è il tuo biglietto da visita, sempre aperto.
               </p>
             </div>
-            <ul className="offer two">
+            <ul className="offer why-list">
               {WHY.map((w) => (
                 <li key={w.title}>
                   <h3>{w.title}</h3>
@@ -84,7 +93,7 @@ export default function Home() {
                 Dal sito che dà informazioni al sito che lavora per te. Si parte da ciò che serve alla tua attività: puoi fermarti al primo livello o salire quando ti serve.
               </p>
             </div>
-            <ul className="offer">
+            <ul className="offer ladder">
               {LEVELS.map((l) => (
                 <li key={l.tag}>
                   <span className="tag">{l.tag}</span>
@@ -118,14 +127,13 @@ export default function Home() {
             <ol className="way">
               {WAY.map((w, i) => (
                 <li key={w.title}>
-                  <span className="n" aria-hidden="true">
-                    {i + 1}
-                  </span>
                   <h3>{w.title}</h3>
                   <p>{w.text}</p>
+                  {i < WAY.length - 1 && <DownArrow />}
                 </li>
               ))}
             </ol>
+            <WayReveal />
           </div>
         </section>
 
@@ -136,7 +144,7 @@ export default function Home() {
               <p className="lead">Raccontaci la tua attività: ti rispondiamo noi, di persona.</p>
             </div>
             <div className="cta-row">
-              <Link className="btn alba" href="/contatti">
+              <Link className="btn ink" href="/contatti">
                 Contattaci
               </Link>
             </div>

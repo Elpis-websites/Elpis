@@ -1,6 +1,6 @@
 // Gestione della richiesta del modulo contatti, scritta con le API web standard (Request/Response):
 // non dipende da Next, quindi si prova con `npm test` senza avviare nulla.
-import { buildMail, clean, validate, type Mail } from "./contact.ts";
+import { buildConfirmation, buildMail, clean, validate, type Mail } from "./contact.ts";
 
 const MAX_BODY = 10 * 1024; // byte
 const RATE = { max: 5, windowMs: 60 * 60 * 1000 }; // 5 richieste per indirizzo all'ora
@@ -52,7 +52,7 @@ const escapeHtml = (s: string): string =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 const pagina = (titolo: string, testo: string): string => `<!doctype html>
-<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(titolo)} | ELPIS</title></head>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(titolo)} | MALTEN</title></head>
 <body><h1>${escapeHtml(titolo)}</h1><p>${escapeHtml(testo)}</p><p><a href="/contatti">Torna ai contatti</a> · <a href="/">Pagina iniziale</a></p></body></html>
 `;
 
@@ -140,6 +140,16 @@ export function createContactHandler(deps: Deps): (request: Request) => Promise<
       return reply(502, false, "Non siamo riusciti a inviare la richiesta. Riprova tra poco.");
     }
     log({ evento: "inviata", codice: 200 });
+
+    // Conferma a chi ha scritto, all'indirizzo del modulo. Parte solo dopo che la richiesta è arrivata al team e un suo
+    // eventuale errore non cambia la risposta (la richiesta c'è): finisce nei log, senza indirizzi né nomi.
+    try {
+      await deps.sendMail(buildConfirmation({ value: check.value, from: deps.from, replyTo: deps.to }));
+      log({ evento: "conferma_inviata", codice: 200 });
+    } catch (err) {
+      const e = err as { code?: unknown; name?: unknown; responseCode?: unknown } | null;
+      log({ evento: "errore_conferma", codice: 200, causa: String(e?.code ?? e?.responseCode ?? e?.name ?? "errore") });
+    }
     return reply(200, true);
   };
 }
