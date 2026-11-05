@@ -136,7 +136,6 @@ export default function Home() {
             <WayReveal />
           </div>
         </section>
-
         <section id="contatti" aria-labelledby="h-contatti">
           <div className="wrap">
             <div className="sec-head">
