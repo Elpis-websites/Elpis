@@ -93,7 +93,15 @@ Il `Dockerfile` usa `npm ci` e quindi richiede `package-lock.json` nel repositor
 
 ### 2.5 Informativa privacy
 
-La pagina dice «Usiamo nome, email e messaggio solo per risponderti», senza link. Raccogliere dati personali richiede in genere un'informativa vera (titolare, finalità, durata, diritti). Va scritta con un consulente; poi si aggiunge il link nel punto marcato `TODO-CLIENTE` in `contatti.html` e nel piè di pagina.
+**Finestra a comparsa (5 novembre).** L'informativa non è una pagina a parte: è una finestra rettangolare che si apre sopra la pagina quando si preme «Leggi l'informativa privacy» sotto il modulo (pagina Contatti) o «Informativa privacy» nel piè di pagina (entrambe le pagine). Lo sfondo si sfoca, la finestra compare e sparisce con una breve animazione (circa 0,35 s in entrata e 0,25 s in uscita; con il sistema impostato su «riduci i movimenti» è istantanea), il testo scorre dentro la finestra e in alto a destra c'è la X. Si chiude anche con Esc, con un clic fuori dalla finestra o seguendo un link al suo interno. Misure: circa due terzi della larghezza e dell'altezza dello schermo (al massimo 940 × 760 px, per tenere le righe leggibili sugli schermi grandi); sotto i 760 px (telefono) occupa quasi tutto lo schermo. Colori della fascia scura del sito (blu e azzurro del logo, fascia ambra in alto), testo più piccolo del resto della pagina (14 px). Senza JavaScript la finestra non si può aprire: il testo compare in fondo alla pagina e i link portano lì. Si può aprire anche dall'indirizzo con `#informativa` in fondo (ad esempio `Malten.html#informativa`).
+
+Cosa dice: titolare, dati raccolti (nome, cognome, email, messaggio), finalità e base giuridica (articolo 6, paragrafo 1, lettera b, GDPR: la richiesta stessa), nessuna newsletter né decisione automatica, chi riceve i dati (chi ospita il sito e chi gestisce la posta, per conto nostro), possibili trasferimenti fuori dall'Unione europea, conservazione, diritti, reclamo al Garante e assenza di cookie. Nessuna casella da accettare: per rispondere a una richiesta non serve il consenso. Se si aggiungono newsletter o promozioni, serve una casella di consenso separata e non pre-spuntata.
+
+Dove si modifica. **Sito statico:** il testo è nel dizionario `PRIVACY` di `build/gen2.py` (da lì lo prende anche `build/gen_next.py`), lo stile in `build/style.css` (blocco «informativa privacy», colori come variabili in `:root`: `--band-*`, `--band-link`, `--scrim`), lo script nei due file `build/app-index.js` e `build/app-contatti.js` (stesso blocco); poi si esegue `python3 gen2.py` nella cartella `build`. **Progetto Next:** testo in `lib/content.ts` (sezione `PRIVACY`), dati dell'azienda in `lib/site.ts`, finestra in `components/PrivacyDialog.tsx` e `components/PrivacyContent.tsx`, stile in `app/globals.css`. Attenzione: `build/gen_next.py` riscrive `lib/content.ts` e `app/globals.css`, quindi per cambiare il testo si modifica `build/gen2.py` oppure, se si lavora solo su Next, direttamente `lib/content.ts` senza rieseguire il generatore.
+
+Dati ancora vuoti, segnati `TODO-CLIENTE` e quindi non visibili in pagina: ragione sociale, sede ed email per le richieste sulla privacy, durata di conservazione. Nel sito statico sono commenti dentro la finestra (in `build/gen2.py`, funzione `privacy_dialog`); in Next sono `TITOLARE` e `CONSERVAZIONE_MESI` in `lib/site.ts`. Senza email per i diritti il testo rimanda al modulo contatti; senza durata di conservazione usa una formula generica. Se si cambiano gli stili o gli script di una pagina, ricalcolare il CSP (`scripts/csp.py`): il blocco di stile è identico nelle due pagine, quindi un solo hash.
+
+Da verificare con un consulente prima di dare l'informativa per definitiva: nome dei fornitori e contratti di nomina (art. 28 GDPR), trasferimenti fuori dall'Unione e garanzie, durata di conservazione, dati del titolare. Il testo cambia se si aggiungono cookie, statistiche, mappe o altri servizi esterni (sezione 8.6).
 
 ## 3. Cosa avevo ottimizzato nella prima versione
 
@@ -136,13 +144,13 @@ Questa tabella descrive il lavoro di base sulla pagina originale. Le righe su gl
 
 ## 5. Da sostituire prima di pubblicare
 
-Ogni punto è marcato `TODO-CLIENTE` (5 nella home, 6 nei contatti). I testi commerciali vanno anche riletti dal titolare (sezione 1, «Da confermare con voi»). Gli indirizzi e gli esempi del sito sono ancora quelli segnaposto (`malten.example` nelle pagine, `esempio.it` negli esempi di questo manuale): per ora restano così.
+Ogni punto è marcato `TODO-CLIENTE` (9 nella home, 8 nei contatti). I testi commerciali vanno anche riletti dal titolare (sezione 1, «Da confermare con voi»). Gli indirizzi e gli esempi del sito sono ancora quelli segnaposto (`malten.example` nelle pagine, `esempio.it` negli esempi di questo manuale): per ora restano così.
 
 | Dove | Valore attuale | Cosa mettere |
 | --- | --- | --- |
 | `canonical`, `og:url`, JSON-LD (entrambe le pagine) | `https://malten.example/` | Indirizzo reale della pagina, con `https://`. Il dominio con il vecchio nome (`elpis-web.it`) non vale più dopo il cambio di nome in MALTEN: il nuovo dominio è da scegliere e registrare, poi da inserire al momento della messa online |
-| Piè di pagina (entrambe) | nessun dato legale | Ragione sociale, partita IVA, sede, link all'informativa |
-| `contatti.html`, sotto il modulo | frase senza link | Link all'informativa privacy |
+| Piè di pagina (entrambe) | nessun dato legale | Ragione sociale, partita IVA, sede |
+| Informativa privacy (finestra, in fondo a entrambe le pagine; in Next `lib/site.ts`: `TITOLARE`, `CONSERVAZIONE_MESI`) | titolare, conservazione ed email per i diritti vuoti | Dati del titolare e durata di conservazione (sezione 2.5) |
 | JSON-LD | nessun `contactPoint` | Telefono ed email pubblici, se si vogliono mostrare |
 | **Server**, non nelle pagine | `CONTACT_TO` non impostata | **Email di destinazione delle richieste (da decidere)** e dati SMTP |
 
@@ -182,7 +190,7 @@ sito-malten/
 └─ .github/workflows/deploy.yml
 ```
 
-La cartella `build/` usata in questa sessione (generatore delle pagine, prove automatiche) non fa parte della consegna: la fonte di verità sono i due file HTML, da modificare direttamente.
+La cartella `build/` (generatore delle pagine e prove automatiche) non va sul server. Se è nel repository, le pagine si rigenerano da lì (`python3 gen2.py` nella cartella `build`) e le modifiche si fanno nel generatore; i test (`testA.js`, `testB.js`, `testC.js`, `testfile.js`, con `node testsrv.mjs` in un altro terminale) servono a controllare il risultato. Se la cartella non c'è, la fonte di verità sono i due file HTML, da modificare direttamente.
 
 ### 6.2 Flusso
 
@@ -489,7 +497,7 @@ Tutti da confermare con il commercialista per la vostra situazione:
 
 Per una società di capitali l'articolo 2250 del Codice civile richiede, anche sul sito: ragione sociale, sede legale, ufficio del Registro Imprese e numero REA, codice fiscale e partita IVA, capitale sociale (versato e esistente), stato di liquidazione se in corso, indicazione del socio unico se c'è, PEC. Il D.Lgs. 70/2003 richiede indirizzo e recapiti, e il numero di iscrizione al Registro Imprese per chi vende online. La mancanza è sanzionata con una somma da 206 a 2.065 euro (fonte secondaria). Questi dati vanno nel piè di pagina di entrambe le pagine, al posto del segnaposto `TODO-CLIENTE`.
 
-Il sito oggi non usa cookie né strumenti di analisi o servizi di terzi: per questo non serve un avviso sui cookie. Verificarlo ogni volta che se ne aggiunge uno. Il modulo contatti raccoglie dati personali: serve l'informativa.
+Il sito oggi non usa cookie né strumenti di analisi o servizi di terzi: per questo non serve un avviso sui cookie. Verificarlo ogni volta che se ne aggiunge uno. Il modulo contatti raccoglie dati personali (anche se le richieste arrivano solo alla casella del team) e il sito invia una conferma automatica: serve l'informativa, che è la finestra descritta nella sezione 2.5. Non serve una casella «accetto» per inviare la richiesta.
 
 ### 8.7 Domande da portare al commercialista e al notaio
 
@@ -525,9 +533,11 @@ Cifre da fonti secondarie: ordini di grandezza, non preventivi.
 
 - Home: 81 controlli automatici superati (menu su telefono con apertura, chiusura con Esc e dopo la scelta di una voce, ancore, titoli, le cinque schede con le facce del logo che si illuminano come previsto, frecce, Home e Fine, testo su certificati e rinnovi, pagina senza script, nessuna parola di prezzo o di piano, logo a 68 px su desktop e 30 px su telefono, nessuna area toccabile sotto i 44 px; cerchi numerati sul logo: 5, tutti da almeno 44 px, non sovrapposti, dentro il logo, ognuno porta all'argomento giusto e illumina le facce giuste, la pagina non scorre al tocco; nascosti su desktop con il mouse).
 - Dopo la riprogettazione grafica gli stessi controlli (81 home, 45 contatti, 55 apertura da disco) sono stati rieseguiti e passano, senza modificarli. Ho misurato sui pixel disegnati il contrasto di 29 tipi di testo (titoli, paragrafi, pulsanti, fascia scura, livello scuro, fascia ambra, piè di pagina), in tema chiaro e scuro, a 1280 e 390 px: tutti almeno 4,5:1; l'unica misura sotto soglia (la scheda attiva dell'elenco) è un artefatto, perché il numero dentro la scheda ha colori propri. Le schermate di chiaro, scuro e telefono sono state guardate una per una.
-- Contatti: 45 controlli superati (validazione dei campi, invio con esito positivo e con errore, blocco del doppio invio, campo trappola, invio senza JavaScript, tema scuro, logo a 68 px).
+- Contatti: 46 controlli superati (validazione dei campi, invio con esito positivo e con errore, conferma al cliente, blocco del doppio invio, campo trappola, invio senza JavaScript, tema scuro, logo a 68 px).
 - Servizio di invio: 14 test automatici superati (validazione, limite di frequenza, campo trappola, pulizia delle intestazioni, risposte JSON e HTML, nessun dato personale nei log, **conferma al cliente**: destinatario, oggetto fisso, messaggio non ripetuto, intestazione di risposta automatica, richiesta valida anche se la conferma fallisce, nessuna conferma se la richiesta al team non parte) con un invio simulato al posto dell'SMTP. **Non provato:** un invio SMTP reale con nodemailer (il registro dei pacchetti non è raggiungibile da dove ho lavorato) e la consegna effettiva nelle caselle dei clienti: si verifica con l'invio di prova della sezione 6.
 - Nessun errore né avviso in console con il CSP rigido; nessuno scroll orizzontale da 320 a 1920 px.
+- Finestra dell'informativa privacy (5 novembre, sito statico): 353 controlli automatici superati (`build/testC.js`) su entrambe le pagine, a 320, 390, 768, 1280 e 1920 px, in chiaro e in scuro, con il CSP rigido: si apre dal modulo, dal piè di pagina e da `#informativa`; si chiude con X, Esc e clic sullo sfondo, con animazione di uscita; il testo scorre dentro la finestra e non la pagina dietro; sfondo sfocato; X da 44 px in alto a destra; misure circa 2/3; il focus va sulla X e torna al link; movimento ridotto; senza JavaScript il testo resta in fondo alla pagina. Gli altri test sono rimasti uguali e passano (home 81, contatti 46, da disco 57, servizio 14). Nel test della home la lista di titoli e link esclude ora la finestra (`testA.js`).
+- Stessa finestra nel progetto Next: i due componenti (`PrivacyDialog.tsx`, `PrivacyContent.tsx`) compilati con React 19 in un banco di prova e provati in Chromium con lo stesso stile (apertura da modulo, piè di pagina e `#informativa`, X, Esc, clic sullo sfondo, misure); controllo dei tipi con segnaposto minimi di React e Next. **Non** eseguiti `npm install`, `typecheck`, `npm test` e `next build` sul progetto vero (registro npm non raggiungibile in quella sessione): da fare prima di pubblicare.
 - Coerenza dell'HTML: id univoci, ancore e riferimenti ARIA esistenti, un solo `h1` per pagina, nessun attributo `style`, nessuna risorsa esterna.
 - Contrasti calcolati su tutte le coppie di colori in tema chiaro e scuro.
 

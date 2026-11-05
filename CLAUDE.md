@@ -1,4 +1,4 @@
-# Regole per l'AI: sito ELPIS (Next.js)
+# Regole per l'AI: sito MALTEN (Next.js)
 
 Letto a ogni sessione. Sono istruzioni, non suggerimenti: se una regola ti impedisce di fare ciò che ti è stato chiesto, fermati e spiega quale regola è in conflitto. Per le regole generali del team valgono anche quelle del `CLAUDE.md` condiviso; quando c'è conflitto con questo file, vale questo (stack diverso: vedi sotto).
 
@@ -29,7 +29,7 @@ Sito vetrina per piccole e medie imprese (ristoranti, studi medici, artigiani): 
 
 ## Regole di codice
 
-- Componenti server per impostazione predefinita; `"use client"` solo dove serve interattività (oggi: intestazione, schede, modulo).
+- Componenti server per impostazione predefinita; `"use client"` solo dove serve interattività (oggi: intestazione, schede, modulo, finestra dell'informativa privacy).
 - Nessuno stile inline (`style=`) e nessuno script inline: lo stile sta in `globals.css`.
 - Accessibilità: elementi toccabili di almeno 44×44 px, ordine dei titoli corretto, tastiera funzionante (schede con frecce, Home, Fine), contrasto adeguato anche in modalità scura, funzionamento del modulo anche senza JavaScript.
 - Mobile first: prova a 390 px di larghezza, nessuno scorrimento orizzontale.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { PRIVACY } from "@/lib/content";
 
 type Stato = { tipo: "fermo" | "invio" | "ok" | "errore"; testo: string };
 
@@ -75,8 +76,13 @@ export function ContactForm() {
           {stato.testo}
         </p>
       </div>
-      {/* TODO-CLIENTE: aggiungere qui il link all'informativa privacy quando esiste la pagina */}
-      <p className="privacy">Usiamo nome, email e messaggio solo per risponderti.</p>
+      <p className="privacy">
+        {PRIVACY.formNote}{" "}
+        <a href="#informativa" data-informativa>
+          {PRIVACY.linkLabel}
+        </a>
+        .
+      </p>
     </form>
   );
 }

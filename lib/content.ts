@@ -184,3 +184,73 @@ export const FOOT = {
   motto: "Qui ci pensiamo noi.",
   contact: "Basta un modulo: nome, email e due righe sulla tua attività.",
 } as const;
+
+// Informativa privacy (testo unico con il sito statico: si modifica in build/gen2.py, dizionario PRIVACY). La finestra è in components/PrivacyDialog.tsx.
+export const PRIVACY = {
+  "title": "Informativa privacy",
+  "lead": "Qui spieghiamo, in parole semplici, cosa succede ai dati che ci scrivi nel modulo di contatto.",
+  "updated": "Ultimo aggiornamento: novembre 2026.",
+  "close": "Chiudi l'informativa privacy",
+  "formNote": "Usiamo nome, email e messaggio solo per risponderti.",
+  "linkLabel": "Leggi l'informativa privacy",
+  "footLabel": "Informativa privacy",
+  "titolare": {
+    "title": "Chi è il titolare",
+    "intro": "Il titolare del trattamento, cioè chi decide come usare i tuoi dati, è MALTEN."
+  },
+  "dati": {
+    "title": "Quali dati raccogliamo",
+    "items": [
+      "il tuo nome e cognome",
+      "il tuo indirizzo email",
+      "il messaggio che scrivi"
+    ],
+    "outro": "Il sito non chiede altro."
+  },
+  "perche": {
+    "title": "Perché li usiamo",
+    "paragraphs": [
+      "Li usiamo per leggere la tua richiesta, risponderti e mandarti un'email automatica che conferma che l'abbiamo ricevuta. La base giuridica è la tua stessa richiesta: ci scrivi per essere contattato (articolo 6, paragrafo 1, lettera b, del GDPR).",
+      "Non li usiamo per newsletter o pubblicità e non prendiamo decisioni automatiche su di te. Se un giorno volessimo usarli per altro, ti chiederemmo prima il permesso.",
+      "Dare i dati è una tua scelta, ma senza nome ed email non possiamo risponderti."
+    ]
+  },
+  "chi": {
+    "title": "Chi li riceve",
+    "paragraphs": [
+      "Li leggono le persone di MALTEN che gestiscono le richieste. Per far funzionare il servizio ci appoggiamo a fornitori che trattano i dati solo per nostro conto: chi ospita il sito e chi gestisce la posta elettronica. Chi ospita il sito può registrare dati tecnici di collegamento, come l'indirizzo IP, per far funzionare e proteggere il servizio.",
+      "Non vendiamo i dati e non li cediamo ad altri. Alcuni fornitori possono avere server fuori dall'Unione europea: in quel caso i dati escono dall'Unione solo con le garanzie previste dalla legge."
+    ]
+  },
+  "conservazione": {
+    "title": "Per quanto tempo li teniamo",
+    "base": "Teniamo i tuoi dati per il tempo necessario a rispondere alla tua richiesta e a gestire gli eventuali contatti successivi."
+  },
+  "diritti": {
+    "title": "I tuoi diritti",
+    "intro": "Nei casi previsti dalla legge puoi chiederci di:",
+    "items": [
+      "sapere se trattiamo i tuoi dati e averne una copia",
+      "correggerli se sono sbagliati",
+      "cancellarli",
+      "limitarne l'uso o opporti al trattamento"
+    ],
+    "contactBase": "Per esercitare i tuoi diritti scrivici",
+    "contactEmail": "a",
+    "contactForm": "dal modulo della pagina",
+    "contactFormLink": "Contatti",
+    "reclamo": "Se pensi che i tuoi dati non siano trattati correttamente puoi presentare reclamo al Garante per la protezione dei dati personali:",
+    "garanteLabel": "garanteprivacy.it",
+    "garanteHref": "https://www.garanteprivacy.it"
+  },
+  "cookie": {
+    "title": "Cookie",
+    "paragraphs": [
+      "Questo sito non usa cookie e non usa strumenti per analizzare le visite né servizi di altri (per esempio mappe, video o caratteri scaricati da internet). Per questo non ti mostriamo nessun avviso sui cookie. Se in futuro ne aggiungeremo, lo scriveremo qui e ti chiederemo il consenso quando serve."
+    ]
+  }
+} as const;
+
+export function conservazioneLimite(mesi: number): string {
+  return `In ogni caso non oltre ${mesi} mesi dall'ultimo contatto, salvo obblighi di legge.`;
+}

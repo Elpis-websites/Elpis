@@ -26,6 +26,8 @@
   --band-muted: #C3D8DD;
   --band-line: #4C7783;
   --band-raised: #2A5A67;
+  --band-link: #8CC3D1;
+  --scrim: #0B1A1E99;
   --gem-a: var(--brand);
   --gem-b: var(--strong);
   --shadow: 0 8px 24px #14262b1f, 0 2px 6px #14262b0f;
@@ -255,7 +257,43 @@ footer nav.foot-nav { display: block; }
 .esito.ok { color: var(--strong); }
 .esito.err { color: var(--danger); }
 .privacy { font-size: 13px; line-height: 19px; color: var(--muted); }
+.privacy a { text-underline-offset: 3px; }
 @media (max-width: 560px) { .row2 { grid-template-columns: minmax(0, 1fr); } .form-card { padding: 24px 20px; } }
+
+/* informativa privacy: finestra sopra la pagina, scorrevole, con lo sfondo sfocato; colori della fascia scura (blu e azzurro del logo) */
+html:has(dialog.pv[open]) { overflow: hidden; }
+dialog.pv { --focus: var(--alba); padding: 0; margin: auto; width: min(66vw, 940px); height: min(66dvh, 760px); min-height: min(420px, calc(100dvh - 24px)); max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow: hidden; color: var(--band-ink); background: var(--band); border: 1px solid var(--band-line); border-top: 4px solid var(--alba); box-shadow: var(--shadow); }
+dialog.pv[open] { display: flex; flex-direction: column; animation: pv-in .35s cubic-bezier(.22, 1, .36, 1) both; }
+dialog.pv::backdrop { background: var(--scrim); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+dialog.pv[open]::backdrop { animation: pv-fade .35s ease both; }
+dialog.pv.is-closing { animation: pv-out .25s ease-in both; }
+dialog.pv.is-closing::backdrop { animation: pv-fade-out .25s ease-in both; }
+@keyframes pv-in { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes pv-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(12px) scale(.98); } }
+@keyframes pv-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pv-fade-out { from { opacity: 1; } to { opacity: 0; } }
+.pv-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 4px 4px 4px 24px; background: var(--band-raised); border-bottom: 1px solid var(--band-line); }
+.pv-head h2 { font-size: 17px; line-height: 24px; font-weight: 700; letter-spacing: 0; color: var(--band-ink); }
+.pv-close { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--band-ink); background: transparent; border: 0; cursor: pointer; }
+.pv-close:hover { background: var(--band-line); }
+.pv-close svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; }
+.pv-close:focus-visible { outline: 2px solid var(--alba); outline-offset: -4px; }
+.pv-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: 18px; padding: 18px 24px 28px; font-size: 14px; line-height: 21px; scrollbar-color: var(--band-line) transparent; }
+.pv-body p, .pv-body li { max-width: 70ch; color: var(--band-muted); }
+.pv-body .pv-lead { color: var(--band-ink); }
+.pv-body .pv-agg { font-size: 12px; line-height: 18px; margin-top: -10px; }
+.pv-body section { padding-block: 0; display: grid; gap: 6px; }
+.pv-body h3 { font-size: 15px; line-height: 22px; font-weight: 700; color: var(--band-ink); }
+.pv-body ul { display: grid; gap: 4px; padding-left: 20px; list-style: disc; }
+.pv-body a { color: var(--band-link); text-underline-offset: 3px; }
+@media (max-width: 760px) { dialog.pv { width: calc(100vw - 24px); height: min(86dvh, calc(100dvh - 24px)); } .pv-head { padding-left: 18px; } .pv-body { padding: 16px 18px 24px; } }
+@media (prefers-reduced-motion: reduce) { dialog.pv, dialog.pv::backdrop { animation: none !important; } }
+/* senza JavaScript la finestra non si può aprire: l'informativa resta leggibile in fondo alla pagina, raggiungibile dai link */
+@media (scripting: none) {
+  dialog.pv { display: flex; flex-direction: column; position: static; width: min(100% - 40px, 880px); height: auto; max-height: none; margin: 32px auto; }
+  .pv-close { display: none; }
+  .pv-body { overflow: visible; }
+}
 
 /* tocco: il pulsante si abbassa di un punto */
 .btn:active, nav a.cta:active, .send button:active { transform: translateY(1px); }
